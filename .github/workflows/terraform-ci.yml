@@ -1,4 +1,4 @@
-name: Terraform CI
+name: Terraform Lint
 
 on:
   push:
@@ -9,11 +9,6 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-
-    env:
-      # Terraform variable for your Docker image
-      TF_VAR_docker_image: "maxtrax969/hello-docker:latest"
-      AWS_REGION: "us-east-1"
 
     steps:
       - name: Checkout repository
@@ -28,22 +23,7 @@ jobs:
         run: terraform fmt -check -recursive
 
       - name: Terraform init
-        run: terraform init
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ env.AWS_REGION }}
+        run: terraform init -backend=false
 
       - name: Terraform validate
         run: terraform validate
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ env.AWS_REGION }}
-
-      - name: Terraform plan
-        run: terraform plan -no-color -input=false
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ env.AWS_REGION }}
