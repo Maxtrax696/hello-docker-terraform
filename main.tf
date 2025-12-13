@@ -183,7 +183,7 @@ resource "aws_autoscaling_group" "app" {
   desired_capacity          = 2
   vpc_zone_identifier       = data.aws_subnets.default.ids
   health_check_type         = "EC2"
-  health_check_grace_period = 60
+  health_check_grace_period = 120
 
   target_group_arns = [aws_lb_target_group.app.arn]
 
